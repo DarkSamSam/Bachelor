@@ -10,6 +10,9 @@ subplot(2,1,1);
 plot(t,y(:,1),'b',t,y(:,2),'r',t,y(:,3),'g',t,y(:,4),'k');
 title('State variables variation');
 legend('x [m]','dx [m/s]','theta [rad]','dtheta [rad/s]','input [N]');
+xlabel('time[s]');
+ylabel('value');
+
 subplot(2,1,2);
 plot(t,u(:),'b');
 title('Input');
