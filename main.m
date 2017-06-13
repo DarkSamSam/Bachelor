@@ -58,17 +58,10 @@ disc_eqs_l = phi*state + gamma*u;
 %% Open Loop
    tspan = [0 20]; %simulation interval, this will need to change a little, after discretization is implemented
   y0 = [0 0 0.5 0];   %initial conditions on states
-   syms t positive
-   input = 0.*t + 0.01;   %input force as a function of time
-%   [open_times,open_states,open_feedback] = simu(fxu,state,input,tspan,y0,'');   %last input should be filename if graph is to be saved
-  [open_times,open_states,open_feedback] = open_control(disc_eqs,state, 10, y0, para.h);
+  [open_times,open_states,open_feedback] = open_control(disc_eqs,state, 10, y0, para.h); %last input should be filename if graph is to be saved
 
 
 %% PID
-% [pid_times,pid_states,pid_feedback] =
-% pid_control(fxu,state,0,y0,60,1,20,10,para.h);%deprecated
-% [pid_l_times,pid_l_states,pid_l_feedback] =
-% pid_control(fxu_l,state,0,y0,60,1,20,10,para.h);%deprecated
 % [pid_times,pid_states,pid_feedback] = pid_control(disc_eqs,state,0,y0,60,1,20,10,para.h);
 
 
@@ -77,8 +70,6 @@ disc_eqs_l = phi*state + gamma*u;
  Q(1,1) = 1; % x position weight in LQR
  Q(3,3) = 500;   % theta angle weight in LQR
  R = 1;  %weight of input in LQR
-% [lqr_times,lqr_states,lqr_feedback] =
-% lqr_control(A,B,Q,R,y0,10,para.h);%deprecated
 [lqr_times,lqr_states,lqr_feedback] = lqr_control(phi,gamma,Q,R,y0,10,para.h);
 
 %% Graphs
