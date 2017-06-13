@@ -17,7 +17,7 @@ legend('input [N]');
 xlabel('time[s]');
 ylabel('value');
 
-if filename ~= ''
+if ~isempty(filename)
     print(filename,'-dpng');    %save graph to file
 end
 
