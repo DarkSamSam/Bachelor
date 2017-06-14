@@ -22,10 +22,10 @@ for i=1:size(times,2)
     %axis([-0.1 0.3 -0.1 0.3]);
     daspect([1 1 1]);   %to keep the correct aspect ratio (same scal axis)
     
-    if filename ~= ''
+    if ~isempty(filename)
         togif(filename,i)
     end
-    pause(0.001);
+    pause(0.001);   %only pauses for 0.01 seconds max on my computer
 end
 %hold off
 end
