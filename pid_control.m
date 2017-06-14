@@ -20,6 +20,7 @@ f = matlabFunction(eqs, 'Vars', {u,[x(1);x(2);x(3);x(4)]}); %transforms symbolic
 n=floor(time/h);    %number of samples
 y = zeros(n,4);
 t = zeros(1,n);
+
 %intital setup
 y(1,1) = y0(1);
 y(1,2) = y0(2);
@@ -27,8 +28,9 @@ y(1,3) = y0(3);
 y(1,4) = y0(4);
 lasterr=setpoint-y(1,3);  %keeps track of the last error
 integral=0; %keeps track of total error over time
-% simulation with pid controller. Here only the tilt angle is controlled
 output = zeros(1,n);
+
+% simulation with pid controller. Here only the tilt angle is controlled
 for i=2:n
     measured = y(i-1,3);    %last calculated angle value
     err = setpoint - measured;  %error
