@@ -114,8 +114,8 @@ try:
       Dterm = KD * (Cangle - lastAngle)
       lastAngle = Cangle
       output = Pterm + Iterm + Dterm
-      print(output)
-      if output > 2:
+      #print(output)
+      if output > 2: #not using PWM at the moment, since it was not working
             GPIO.output(in1, GPIO.HIGH)
             GPIO.output(in2, GPIO.LOW)
             GPIO.output(in3, GPIO.HIGH)
