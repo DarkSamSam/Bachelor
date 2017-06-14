@@ -23,6 +23,7 @@ Kinf = inv(Q2+gamma'*Sinf*gamma)*gamma'*Sinf*phi;   %controller gains computatio
 n=floor(time/h);    %number of samples
 y = zeros(n,4);
 t = zeros(1,n);
+
 %intital setup
 y(1,1) = y0(1);
 y(1,2) = y0(2);
@@ -30,6 +31,7 @@ y(1,3) = y0(3);
 y(1,4) = y0(4);
 u = zeros(1,n);
 
+%time simulation of the system with LQR controlling tilt and position
 for i=2:n
     u(i) = -Kinf*y(i-1,:)'; %state feedback with controller gains
     x = phi*y(i-1,:)' + gamma*u(i); %iteration solution
