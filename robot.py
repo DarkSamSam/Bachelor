@@ -36,12 +36,20 @@ GPIO.setup(in4, GPIO.OUT)
 GPIO.setup(halA, GPIO.IN) #may have to use pull_up_down=GPIO.PUD_DOWN or PUD_UP not used atm
 
 ########## IMU configuration ###########
+# check imu data sheets for more info
 # Power management registers (needed to wake IMU up from sleep mode)
 power_mgmt_1 = 0x6b
 power_mgmt_2 = 0x6c
 
 ## functions definitions for reading data off IMU
 # add paragraph on how IMU stores measurments and functions explanation
+#IMU stores sensor readings as 2 byte values (words) in registories. Each registory being 1 byte long,
+#2 (conscutive) registories are used. The high order bits are stored in the first registory, and the low
+#order bits in the next registory. So the to get the data for one mesurment, we need to read 2 consecutive
+#registories at the right adress, then shift the high order bits left by 8 and add the low order bits to them.
+#Finally, the mesurments are stored as unsigned integers on 2 bytes (so between 0 and 65535), with the convention that
+#any value above 32768 is actually a negative value of the complement to 65535. So any value above 32768 must be converted
+#to get the real measurment
 def read_byte(adr):
     return bus.read_byte_data(address, adr)
 
@@ -58,6 +66,7 @@ def read_word_2c(adr):
     else:
         return val
 
+#Basic math functions and trigonometry
 def dist(a,b):
     return math.sqrt((a*a)+(b*b))
 
@@ -125,6 +134,13 @@ try:
       lastAngle = Cangle
       output = Pterm + Iterm + Dterm
       #print(output)
+#the motors work as follows: each one in controlled by 3 signals (which correspond to pins on the raspberry):
+#the first 2, labled as in1 and in2 (respectively in3 and in4) on the H bridge conbine to determine wich way
+#the motor will turn: if both are on HIGH or both on LOW,the motor will not turn at all. Changing one from HIGH
+#to LOW, and the other from LOW to HIGH will make the motor change direction. The 3rd signal labeled enA (respectively enB)
+#on the raspberry, is the signal that actually power the motor (unlike the other 2 signals, wich are just logical signals).
+#If enA is on LOW, the motor will not turn regardless of the in1 and in2 settings. If enA in on HIGH and the other 2 signals
+#are not both set on HIGH or both on LOW, the motor will turn
       if output > 2: #not using PWM at the moment, since it was not working
             #add paragraph about what follows
             GPIO.output(in1, GPIO.HIGH)
@@ -148,5 +164,5 @@ try:
 except KeyboardInterrupt: 
     GPIO.output(enA, GPIO.LOW) #disables motors when key is pressed
     GPIO.output(enB, GPIO.LOW)
-    # Reset GPIO settings
+    # Reset GPIO settings so other programs on the raspberry can use them
     GPIO.cleanup()
